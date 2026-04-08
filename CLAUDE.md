@@ -22,7 +22,7 @@ pre-commit install
 pre-commit run --all-files
 ```
 
-The four checks are:
+The five checks are:
 1. **markdown-lint** — Markdown structure and formatting via `markdownlint`
 2. **cross-references** — Internal links, anchors, code fence syntax (Python script)
 3. **mermaid-syntax** — Validates all Mermaid diagrams parse correctly (Python script)
@@ -108,6 +108,9 @@ uv run scripts/build_epub.py --verbose --output custom-name.epub --max-concurren
 │   ├── check_mermaid.py        # Validates Mermaid syntax
 │   └── tests/                  # Unit tests for scripts
 ├── .pre-commit-config.yaml    # Quality check definitions
+├── vi/                        # Vietnamese translations (mirrors 01-10 structure)
+├── zh/                        # Chinese translations (mirrors 01-10 structure)
+├── .claude/skills/            # Project skills (lesson-quiz, self-assessment)
 └── README.md               # Main guide (also module index)
 ```
 
@@ -144,7 +147,9 @@ Each numbered folder follows the pattern:
 
 4. **Mermaid rendering requires network** — The EPUB build calls Kroki.io API to render diagrams. Build failures here are typically network issues or invalid Mermaid syntax.
 
-5. **This is a tutorial, not a library** — When adding content, focus on clear explanations, copy-paste examples, and visual diagrams. The value is in teaching concepts, not providing reusable code.
+5. **Localized content mirrors the English structure** — The `vi/` and `zh/` directories contain translated versions of the modules. When updating English content, consider whether translations need updating too.
+
+6. **This is a tutorial, not a library** — When adding content, focus on clear explanations, copy-paste examples, and visual diagrams. The value is in teaching concepts, not providing reusable code.
 
 ## Commit Conventions
 

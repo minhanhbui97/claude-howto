@@ -408,10 +408,10 @@ class TestMermaidRenderer:
             patch("pathlib.Path.read_bytes", return_value=fake_png),
         ):
             mock_run.return_value = MagicMock(returncode=0, stderr="")
-            results = renderer.render_all([(1, "graph TD\n  A --> B")])
+            renderer.render_all([(1, "graph TD\n  A --> B")])
 
-        assert len(results) == 1
-        png_bytes, img_name = next(iter(results.values()))
+        assert len(state.mermaid_cache) == 1
+        png_bytes, img_name = next(iter(state.mermaid_cache.values()))
         assert png_bytes == fake_png
         assert img_name.startswith("mermaid_")
         assert img_name.endswith(".png")
@@ -457,12 +457,12 @@ class TestMermaidRenderer:
             patch("pathlib.Path.read_bytes", return_value=fake_png),
         ):
             mock_run.return_value = MagicMock(returncode=0, stderr="")
-            results = renderer.render_all([(1, same_code), (2, same_code)])
+            renderer.render_all([(1, same_code), (2, same_code)])
 
         # mmdc should only be called once for duplicate diagrams
         assert mock_run.call_count == 1
         # Both entries map to the same cached result
-        assert len(results) == 1
+        assert len(state.mermaid_cache) == 1
 
     def test_render_all_timeout(
         self, tmp_path: Path, state: BuildState, logger: logging.Logger

@@ -206,7 +206,8 @@ graph LR
 """
         )
 
-        diagrams = extract_all_mermaid_blocks([(md_file, "Test")], logger)
+        content = md_file.read_text(encoding="utf-8")
+        diagrams = extract_all_mermaid_blocks([(md_file, content)], logger)
 
         assert len(diagrams) == 2
         assert diagrams[0][0] == 1  # First diagram index
@@ -226,11 +227,13 @@ graph TD
     A --> B
 ```"""
 
-        md_file1.write_text(f"# File 1\n\n{same_diagram}")
-        md_file2.write_text(f"# File 2\n\n{same_diagram}")
+        content1 = f"# File 1\n\n{same_diagram}"
+        content2 = f"# File 2\n\n{same_diagram}"
+        md_file1.write_text(content1)
+        md_file2.write_text(content2)
 
         diagrams = extract_all_mermaid_blocks(
-            [(md_file1, "Test1"), (md_file2, "Test2")], logger
+            [(md_file1, content1), (md_file2, content2)], logger
         )
 
         # Should only have one diagram since they're identical

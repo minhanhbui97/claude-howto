@@ -50,6 +50,8 @@ import shutil
 import subprocess  # nosec B404
 import sys
 import tempfile
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from io import BytesIO
 from pathlib import Path
@@ -58,6 +60,12 @@ import markdown
 from bs4 import BeautifulSoup
 from ebooklib import epub
 from PIL import Image, ImageDraw, ImageFont
+
+# =============================================================================
+# Constants
+# =============================================================================
+
+MERMAID_PATTERN = re.compile(r"```mermaid\n(.*?)```", re.DOTALL)
 
 # =============================================================================
 # Custom Exceptions
@@ -157,6 +165,7 @@ class BuildState:
     svg_counter: int = 0
     svg_added_to_book: set[str] = field(default_factory=set)
     path_to_chapter: dict[str, str] = field(default_factory=dict)
+    _mermaid_lock: threading.Lock = field(default_factory=threading.Lock)
 
     def reset(self) -> None:
         """Reset all state for a fresh build."""
@@ -266,8 +275,8 @@ class MermaidRenderer:
 
     def _resolve_mmdc(self) -> str:
         """Resolve the mmdc binary path, raising if not found."""
-        mmdc = shutil.which(self.config.mmdc_path) or self.config.mmdc_path
-        if not shutil.which(mmdc):
+        mmdc = shutil.which(self.config.mmdc_path)
+        if not mmdc:
             raise MermaidRenderError(
                 f"mmdc not found at '{self.config.mmdc_path}'. "
                 "Install it with: npm install -g @mermaid-js/mermaid-cli"
@@ -277,11 +286,15 @@ class MermaidRenderer:
     def _render_one(
         self, mmdc: str, mermaid_code: str, index: int
     ) -> tuple[bytes, str]:
-        """Render a single Mermaid diagram to PNG bytes using mmdc."""
+        """Render a single Mermaid diagram to PNG bytes using mmdc.
+
+        Thread-safe: guards shared counter and cache with a lock.
+        """
         cache_key = mermaid_code.strip()
-        if cache_key in self.state.mermaid_cache:
-            self.logger.debug(f"Cache hit for diagram {index}")
-            return self.state.mermaid_cache[cache_key]
+        with self.state._mermaid_lock:
+            if cache_key in self.state.mermaid_cache:
+                self.logger.debug(f"Cache hit for diagram {index}")
+                return self.state.mermaid_cache[cache_key]
 
         with tempfile.TemporaryDirectory() as tmpdir:
             input_file = Path(tmpdir) / "diagram.mmd"
@@ -322,26 +335,43 @@ class MermaidRenderer:
 
             png_bytes = output_file.read_bytes()
 
-        self.state.mermaid_counter += 1
-        img_name = f"mermaid_{self.state.mermaid_counter}.png"
-        entry = (png_bytes, img_name)
-        self.state.mermaid_cache[cache_key] = entry
+        with self.state._mermaid_lock:
+            self.state.mermaid_counter += 1
+            img_name = f"mermaid_{self.state.mermaid_counter}.png"
+            entry = (png_bytes, img_name)
+            self.state.mermaid_cache[cache_key] = entry
+
         self.logger.info(f"Rendered diagram {index} -> {img_name}")
         return entry
 
     def render_all(
         self, diagrams: list[tuple[int, str]]
     ) -> dict[str, tuple[bytes, str]]:
-        """Render all Mermaid diagrams using local mmdc."""
+        """Render all Mermaid diagrams in parallel using local mmdc."""
         mmdc = self._resolve_mmdc()
         results: dict[str, tuple[bytes, str]] = {}
+        max_workers = min(len(diagrams), os.cpu_count() or 4)
 
-        self.logger.info(f"Rendering {len(diagrams)} Mermaid diagrams locally...")
-        for idx, code in diagrams:
-            sanitized = sanitize_mermaid(code)
-            cache_key = sanitized.strip()
-            data = self._render_one(mmdc, sanitized, idx)
-            results[cache_key] = data
+        self.logger.info(
+            f"Rendering {len(diagrams)} Mermaid diagrams locally ({max_workers} workers)..."
+        )
+
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {}
+            submitted_keys: set[str] = set()
+            for idx, code in diagrams:
+                sanitized = sanitize_mermaid(code)
+                cache_key = sanitized.strip()
+                if cache_key in submitted_keys:
+                    continue
+                submitted_keys.add(cache_key)
+                futures[
+                    executor.submit(self._render_one, mmdc, sanitized, idx)
+                ] = cache_key
+
+            for future in as_completed(futures):
+                cache_key = futures[future]
+                results[cache_key] = future.result()
 
         self.logger.info(
             f"Successfully rendered {len(results)} unique diagrams ({len(diagrams)} total blocks)"
@@ -350,25 +380,24 @@ class MermaidRenderer:
 
 
 def extract_all_mermaid_blocks(
-    md_files: list[tuple[Path, str]], logger: logging.Logger
+    md_contents: list[tuple[Path, str]], logger: logging.Logger
 ) -> list[tuple[int, str]]:
-    """Extract all unique Mermaid code blocks from markdown files."""
-    pattern = r"```mermaid\n(.*?)```"
+    """Extract all unique Mermaid code blocks from pre-read markdown content.
+
+    Args:
+        md_contents: list of (file_path, file_content) tuples.
+    """
     seen: set[str] = set()
     diagrams: list[tuple[int, str]] = []
     counter = 0
 
-    for file_path, _ in md_files:
-        try:
-            content = file_path.read_text(encoding="utf-8")
-            for match in re.finditer(pattern, content, flags=re.DOTALL):
-                code = match.group(1).strip()
-                if code not in seen:
-                    seen.add(code)
-                    counter += 1
-                    diagrams.append((counter, code))
-        except UnicodeDecodeError as e:
-            logger.warning(f"Failed to read {file_path}: {e}")
+    for _, content in md_contents:
+        for match in MERMAID_PATTERN.finditer(content):
+            code = match.group(1).strip()
+            if code not in seen:
+                seen.add(code)
+                counter += 1
+                diagrams.append((counter, code))
 
     logger.info(f"Found {len(diagrams)} unique Mermaid diagrams")
     return diagrams
@@ -720,7 +749,6 @@ def process_mermaid_blocks(
     md_content: str, book: epub.EpubBook, state: BuildState, logger: logging.Logger
 ) -> str:
     """Find mermaid code blocks and replace with image references."""
-    pattern = r"```mermaid\n(.*?)```"
 
     def replace_mermaid(match: re.Match[str]) -> str:
         mermaid_code = sanitize_mermaid(match.group(1))
@@ -744,15 +772,16 @@ def process_mermaid_blocks(
             logger.error("Mermaid diagram not found in cache")
             raise MermaidRenderError("Mermaid diagram not found in cache")
 
-    return re.sub(pattern, replace_mermaid, md_content, flags=re.DOTALL)
+    return MERMAID_PATTERN.sub(replace_mermaid, md_content)
 
 
 def convert_internal_links(
-    html_content: str, current_file: Path, root_path: Path, state: BuildState
-) -> str:
-    """Convert markdown links to internal EPUB chapter links."""
-    soup = BeautifulSoup(html_content, "html.parser")
+    soup: BeautifulSoup, current_file: Path, root_path: Path, state: BuildState
+) -> None:
+    """Convert markdown links to internal EPUB chapter links.
 
+    Mutates the soup object in place to avoid re-parsing HTML.
+    """
     for link in soup.find_all("a"):
         href = link.get("href", "")
         if not href or href.startswith(("http://", "https://", "mailto:", "#")):
@@ -790,8 +819,6 @@ def convert_internal_links(
                     link["href"] = state.path_to_chapter[path] + anchor
                     break
 
-    return str(soup)
-
 
 def md_to_html(
     md_content: str,
@@ -823,7 +850,7 @@ def md_to_html(
         ],
     )
 
-    # Embed SVG images as EPUB resources (using <img> tags, not <object>)
+    # Parse once and reuse the soup for SVG handling and link conversion
     soup = BeautifulSoup(html_content, "html.parser")
     chapter_dir = current_file.parent
 
@@ -835,6 +862,7 @@ def md_to_html(
         else:
             picture.decompose()
 
+    # Embed SVG images as EPUB resources (using <img> tags, not <object>)
     for img in soup.find_all("img"):
         src = img.get("src", "")
         if not src.endswith(".svg"):
@@ -848,12 +876,10 @@ def md_to_html(
         )
         img.replace_with(BeautifulSoup(converted, "html.parser"))
 
-    html_content = str(soup)
+    # Convert internal links to EPUB chapter references (mutates soup in place)
+    convert_internal_links(soup, current_file, root_path, state)
 
-    # Convert internal links to EPUB chapter references
-    html_content = convert_internal_links(html_content, current_file, root_path, state)
-
-    return html_content
+    return str(soup)
 
 
 # =============================================================================
@@ -920,10 +946,21 @@ def build_epub_async(
     collector = ChapterCollector(config.root_path, state)
     chapter_infos = collector.collect_all_chapters(get_chapter_order())
 
+    # Read all chapter files once upfront to avoid redundant I/O
+    logger.info("Reading chapter files...")
+    chapter_contents: list[tuple[ChapterInfo, str]] = []
+    for ch in chapter_infos:
+        try:
+            content = ch.file_path.read_text(encoding="utf-8")
+            chapter_contents.append((ch, content))
+        except UnicodeDecodeError as e:
+            logger.error(f"Failed to read {ch.file_path}: {e}")
+            raise ValidationError(f"Failed to read {ch.file_path}: {e}") from e
+
     # Extract and render all Mermaid diagrams locally
     logger.info("Extracting Mermaid diagrams...")
-    md_files = [(ch.file_path, ch.file_title) for ch in chapter_infos]
-    all_diagrams = extract_all_mermaid_blocks(md_files, logger)
+    md_contents = [(ch.file_path, content) for ch, content in chapter_contents]
+    all_diagrams = extract_all_mermaid_blocks(md_contents, logger)
 
     if all_diagrams:
         renderer = MermaidRenderer(config, state, logger)
@@ -937,15 +974,7 @@ def build_epub_async(
     current_folder: str | None = None
     current_folder_chapters: list[epub.EpubHtml] = []
 
-    for chapter_info in chapter_infos:
-        try:
-            content = chapter_info.file_path.read_text(encoding="utf-8")
-        except UnicodeDecodeError as e:
-            logger.error(f"Failed to read {chapter_info.file_path}: {e}")
-            raise ValidationError(
-                f"Failed to read {chapter_info.file_path}: {e}"
-            ) from e
-
+    for chapter_info, content in chapter_contents:
         logger.debug(
             f"Processing: {chapter_info.file_path.relative_to(config.root_path)}"
         )

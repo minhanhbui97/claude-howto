@@ -360,12 +360,13 @@ class MermaidRenderer:
         self.logger.info(f"Rendered diagram {index} -> {img_name}")
         return entry
 
-    def render_all(
-        self, diagrams: list[tuple[int, str]]
-    ) -> dict[str, tuple[bytes, str]]:
-        """Render all Mermaid diagrams in parallel using local mmdc."""
+    def render_all(self, diagrams: list[tuple[int, str]]) -> None:
+        """Render all Mermaid diagrams in parallel using local mmdc.
+
+        Results are stored in state.mermaid_cache, not returned, to avoid
+        duplicating PNG data in a separate results dict.
+        """
         mmdc = self._resolve_mmdc()
-        results: dict[str, tuple[bytes, str]] = {}
         max_workers = min(len(diagrams), os.cpu_count() or 4)
 
         self.logger.info(
@@ -373,7 +374,7 @@ class MermaidRenderer:
         )
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = {}
+            futures = []
             submitted_keys: set[str] = set()
             for idx, code in diagrams:
                 sanitized = sanitize_mermaid(code)
@@ -381,18 +382,16 @@ class MermaidRenderer:
                 if cache_key in submitted_keys:
                     continue
                 submitted_keys.add(cache_key)
-                futures[
+                futures.append(
                     executor.submit(self._render_one, mmdc, sanitized, idx)
-                ] = cache_key
+                )
 
             for future in as_completed(futures):
-                cache_key = futures[future]
-                results[cache_key] = future.result()
+                future.result()  # propagate exceptions
 
         self.logger.info(
-            f"Successfully rendered {len(results)} unique diagrams ({len(diagrams)} total blocks)"
+            f"Successfully rendered {len(submitted_keys)} unique diagrams ({len(diagrams)} total blocks)"
         )
-        return results
 
 
 def extract_all_mermaid_blocks(
@@ -664,8 +663,10 @@ def create_cover_image(
 
         buffer = BytesIO()
         cover.save(buffer, format="PNG", optimize=True)
+        cover_bytes = buffer.getvalue()
+        buffer.close()
         logger.info("Cover image generated successfully")
-        return buffer.getvalue()
+        return cover_bytes
 
     except Exception as e:
         logger.error(f"Failed to create cover image: {e}")

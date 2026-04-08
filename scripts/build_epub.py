@@ -66,6 +66,24 @@ from PIL import Image, ImageDraw, ImageFont
 # =============================================================================
 
 MERMAID_PATTERN = re.compile(r"```mermaid\n(.*?)```", re.DOTALL)
+MERMAID_SANITIZE_PATTERN = re.compile(r'\[(["\']?)(\d+)\.(\s)')
+
+_STYLESHEET_CSS = """
+    body { font-family: Georgia, serif; line-height: 1.6; padding: 1em; }
+    h1 { color: #333; border-bottom: 2px solid #e67e22; padding-bottom: 0.3em; }
+    h2 { color: #444; margin-top: 1.5em; }
+    h3 { color: #555; }
+    code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
+    pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
+    pre code { background: none; padding: 0; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+    th, td { border: 1px solid #ddd; padding: 0.5em; text-align: left; }
+    th { background: #f4f4f4; }
+    blockquote { border-left: 4px solid #e67e22; margin: 1em 0; padding-left: 1em; color: #666; }
+    a { color: #e67e22; }
+    img { max-width: 100%; height: auto; display: block; margin: 1em auto; }
+    .diagram { text-align: center; margin: 1.5em 0; }
+    """
 
 # =============================================================================
 # Custom Exceptions
@@ -236,8 +254,7 @@ def validate_inputs(config: EPUBConfig, logger: logging.Logger) -> None:
         )
 
     # Verify at least some markdown files exist
-    md_files = list(config.root_path.glob("**/*.md"))
-    if not md_files:
+    if not any(config.root_path.glob("**/*.md")):
         errors.append(f"No markdown files found in {config.root_path}")
 
     if errors:
@@ -259,8 +276,7 @@ def sanitize_mermaid(mermaid_code: str) -> str:
     to prevent that.
     """
     # Escape numbered list patterns inside brackets: [1. Text] -> [1\. Text]
-    sanitized = re.sub(r'\[(["\']?)(\d+)\.(\s)', r"[\1\2\\.\3", mermaid_code)
-    return sanitized
+    return MERMAID_SANITIZE_PATTERN.sub(r"[\1\2\\.\3", mermaid_code)
 
 
 class MermaidRenderer:
@@ -889,27 +905,11 @@ def md_to_html(
 
 def create_stylesheet() -> epub.EpubItem:
     """Create the EPUB stylesheet."""
-    style = """
-    body { font-family: Georgia, serif; line-height: 1.6; padding: 1em; }
-    h1 { color: #333; border-bottom: 2px solid #e67e22; padding-bottom: 0.3em; }
-    h2 { color: #444; margin-top: 1.5em; }
-    h3 { color: #555; }
-    code { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
-    pre { background: #f4f4f4; padding: 1em; overflow-x: auto; border-radius: 5px; }
-    pre code { background: none; padding: 0; }
-    table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-    th, td { border: 1px solid #ddd; padding: 0.5em; text-align: left; }
-    th { background: #f4f4f4; }
-    blockquote { border-left: 4px solid #e67e22; margin: 1em 0; padding-left: 1em; color: #666; }
-    a { color: #e67e22; }
-    img { max-width: 100%; height: auto; display: block; margin: 1em auto; }
-    .diagram { text-align: center; margin: 1.5em 0; }
-    """
     return epub.EpubItem(
         uid="style_nav",
         file_name="style/nav.css",
         media_type="text/css",
-        content=style,
+        content=_STYLESHEET_CSS,
     )
 
 

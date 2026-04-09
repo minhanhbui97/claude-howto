@@ -3,13 +3,13 @@
   <img alt="Claude How To" src="resources/logos/claude-howto-logo.svg">
 </picture>
 
-# Complete Guide to Claude Concepts
+# Повний довідник концепцій Claude
 
-A comprehensive reference guide covering Slash Commands, Subagents, Memory, MCP Protocol, and Agent Skills with tables, diagrams, and practical examples.
+Комплексний довідник, що охоплює слеш-команди, субагентів, пам'ять, протокол MCP та навички агентів з таблицями, діаграмами та практичними прикладами.
 
 ---
 
-## Table of Contents
+## Зміст
 
 1. [Slash Commands](#slash-commands)
 2. [Subagents](#subagents)
@@ -24,13 +24,13 @@ A comprehensive reference guide covering Slash Commands, Subagents, Memory, MCP 
 
 ---
 
-## Slash Commands
+## Слеш-команди
 
-### Overview
+### Огляд
 
-Slash commands are user-invoked shortcuts stored as Markdown files that Claude Code can execute. They enable teams to standardize frequently-used prompts and workflows.
+Слеш-команди — це ярлики, ініційовані користувачем, що зберігаються як Markdown-файли, які Claude Code може виконувати. Вони дозволяють командам стандартизувати часто використовувані промпти та робочі процеси.
 
-### Architecture
+### Архітектура
 
 ```mermaid
 graph TD
@@ -41,7 +41,7 @@ graph TD
     E -->|Returns| F["Result in Context"]
 ```
 
-### File Structure
+### Структура файлів
 
 ```mermaid
 graph LR
@@ -53,7 +53,7 @@ graph LR
     E -->|contains| G["generate-readme.md"]
 ```
 
-### Command Organization Table
+### Таблиця організації команд
 
 | Location | Scope | Availability | Use Case | Git Tracked |
 |----------|-------|--------------|----------|-------------|
@@ -61,7 +61,7 @@ graph LR
 | `~/.claude/commands/` | Personal | Individual user | Personal shortcuts across projects | ❌ No |
 | Subdirectories | Namespaced | Based on parent | Organize by category | ✅ Yes |
 
-### Features & Capabilities
+### Функції та можливості
 
 | Feature | Example | Supported |
 |---------|---------|-----------|
@@ -71,11 +71,11 @@ graph LR
 | Arguments | `/pr --verbose` | ✅ Yes |
 | MCP commands | `/mcp__github__list_prs` | ✅ Yes |
 
-### Practical Examples
+### Практичні приклади
 
-#### Example 1: Code Optimization Command
+#### Приклад 1: Команда оптимізації коду
 
-**File:** `.claude/commands/optimize.md`
+**Файл:** `.claude/commands/optimize.md`
 
 ```markdown
 ---
@@ -101,7 +101,7 @@ Format your response with:
 - Recommended fix with code example
 ```
 
-**Usage:**
+**Використання:**
 ```bash
 # User types in Claude Code
 /optimize
@@ -109,9 +109,9 @@ Format your response with:
 # Claude loads the prompt and waits for code input
 ```
 
-#### Example 2: Pull Request Helper Command
+#### Приклад 2: Команда-помічник для Pull Request
 
-**File:** `.claude/commands/pr.md`
+**Файл:** `.claude/commands/pr.md`
 
 ```markdown
 ---
@@ -143,16 +143,16 @@ Before creating a PR, execute these steps:
    - Potential impacts
 ```
 
-**Usage:**
+**Використання:**
 ```bash
 /pr
 
 # Claude runs through checklist and prepares the PR
 ```
 
-#### Example 3: Hierarchical Documentation Generator
+#### Приклад 3: Ієрархічний генератор документації
 
-**File:** `.claude/commands/docs/generate-api-docs.md`
+**Файл:** `.claude/commands/docs/generate-api-docs.md`
 
 ```markdown
 ---
@@ -178,7 +178,7 @@ Output format:
 - Add TypeScript types
 ```
 
-### Command Lifecycle Diagram
+### Діаграма життєвого циклу команди
 
 ```mermaid
 sequenceDiagram
@@ -198,26 +198,26 @@ sequenceDiagram
     Claude->>User: Returns analysis
 ```
 
-### Best Practices
+### Найкращі практики
 
-| ✅ Do | ❌ Don't |
+| ✅ Рекомендовано | ❌ Не рекомендовано |
 |------|---------|
-| Use clear, action-oriented names | Create commands for one-time tasks |
-| Document trigger words in description | Build complex logic in commands |
-| Keep commands focused on single task | Create redundant commands |
-| Version control project commands | Hardcode sensitive information |
-| Organize in subdirectories | Create long lists of commands |
-| Use simple, readable prompts | Use abbreviated or cryptic wording |
+| Використовуйте зрозумілі, орієнтовані на дію назви | Створювати команди для одноразових завдань |
+| Документуйте ключові слова в описі | Будувати складну логіку в командах |
+| Зосередьте команду на одному завданні | Створювати дублюючі команди |
+| Контролюйте версії проєктних команд | Жорстко прописувати конфіденційну інформацію |
+| Організовуйте у підкаталогах | Створювати довгі списки команд |
+| Використовуйте прості, зрозумілі промпти | Використовувати скорочені або незрозумілі формулювання |
 
 ---
 
-## Subagents
+## Субагенти
 
-### Overview
+### Огляд
 
-Subagents are specialized AI assistants with isolated context windows and customized system prompts. They enable delegated task execution while maintaining clean separation of concerns.
+Субагенти — це спеціалізовані AI-асистенти з ізольованими контекстними вікнами та налаштованими системними промптами. Вони забезпечують делеговане виконання завдань, зберігаючи чітке розділення відповідальностей.
 
-### Architecture Diagram
+### Діаграма архітектури
 
 ```mermaid
 graph TB
@@ -237,7 +237,7 @@ graph TB
     Main -->|synthesizes| User
 ```
 
-### Subagent Lifecycle
+### Життєвий цикл субагента
 
 ```mermaid
 sequenceDiagram
@@ -257,16 +257,16 @@ sequenceDiagram
     MainAgent-->>User: Provide synthesis
 ```
 
-### Subagent Configuration Table
+### Таблиця конфігурації субагента
 
-| Configuration | Type | Purpose | Example |
+| Конфігурація | Тип | Призначення | Приклад |
 |---------------|------|---------|---------|
-| `name` | String | Agent identifier | `code-reviewer` |
-| `description` | String | Purpose & trigger terms | `Comprehensive code quality analysis` |
-| `tools` | List/String | Allowed capabilities | `read, grep, diff, lint_runner` |
-| `system_prompt` | Markdown | Behavioral instructions | Custom guidelines |
+| `name` | String | Ідентифікатор агента | `code-reviewer` |
+| `description` | String | Призначення та ключові слова | `Comprehensive code quality analysis` |
+| `tools` | List/String | Дозволені можливості | `read, grep, diff, lint_runner` |
+| `system_prompt` | Markdown | Поведінкові інструкції | Користувацькі настанови |
 
-### Tool Access Hierarchy
+### Ієрархія доступу до інструментів
 
 ```mermaid
 graph TD
@@ -279,11 +279,11 @@ graph TD
     C -->|Explicit List| C2["Bash(npm:*), Bash(test:*)"]
 ```
 
-### Practical Examples
+### Практичні приклади
 
-#### Example 1: Complete Subagent Setup
+#### Приклад 1: Повне налаштування субагента
 
-**File:** `.claude/agents/code-reviewer.md`
+**Файл:** `.claude/agents/code-reviewer.md`
 
 ```yaml
 ---
@@ -329,7 +329,7 @@ For each issue:
 - **Fix**: Use JOIN or batch query
 ```
 
-**File:** `.claude/agents/test-engineer.md`
+**Файл:** `.claude/agents/test-engineer.md`
 
 ```yaml
 ---
@@ -370,7 +370,7 @@ You are expert at:
 - Report missing coverage areas
 ```
 
-**File:** `.claude/agents/documentation-writer.md`
+**Файл:** `.claude/agents/documentation-writer.md`
 
 ```yaml
 ---
@@ -415,7 +415,7 @@ You create:
 - Related topics
 ```
 
-#### Example 2: Subagent Delegation in Action
+#### Приклад 2: Делегування субагентам у дії
 
 ```markdown
 # Scenario: Building a Payment Feature
@@ -451,9 +451,9 @@ You create:
    - Returns complete solution to user
 ```
 
-#### Example 3: Tool Permission Scoping
+#### Приклад 3: Обмеження доступу до інструментів
 
-**Restrictive Setup - Limited to Specific Commands**
+**Обмежене налаштування — лише конкретні команди**
 
 ```yaml
 ---
@@ -476,7 +476,7 @@ This agent:
 This ensures the reviewer doesn't accidentally break anything.
 ```
 
-**Extended Setup - All Tools for Implementation**
+**Розширене налаштування — усі інструменти для реалізації**
 
 ```yaml
 ---
@@ -500,7 +500,7 @@ This agent:
 Full capabilities for independent feature development.
 ```
 
-### Subagent Context Management
+### Управління контекстом субагента
 
 ```mermaid
 graph TB
@@ -523,30 +523,30 @@ graph TB
     style D fill:#fff9c4
 ```
 
-### When to Use Subagents
+### Коли використовувати субагентів
 
-| Scenario | Use Subagent | Why |
+| Сценарій | Використовувати субагента | Чому |
 |----------|--------------|-----|
-| Complex feature with many steps | ✅ Yes | Separate concerns, prevent context pollution |
-| Quick code review | ❌ No | Not necessary overhead |
-| Parallel task execution | ✅ Yes | Each subagent has own context |
-| Specialized expertise needed | ✅ Yes | Custom system prompts |
-| Long-running analysis | ✅ Yes | Prevents main context exhaustion |
-| Single task | ❌ No | Adds latency unnecessarily |
+| Складна функція з багатьма кроками | ✅ Так | Розділення відповідальностей, запобігання засміченню контексту |
+| Швидкий код-рев'ю | ❌ Ні | Непотрібні накладні витрати |
+| Паралельне виконання завдань | ✅ Так | Кожен субагент має власний контекст |
+| Потрібна спеціалізована експертиза | ✅ Так | Налаштовані системні промпти |
+| Тривалий аналіз | ✅ Так | Запобігає вичерпанню основного контексту |
+| Одне завдання | ❌ Ні | Додає затримку без необхідності |
 
-### Agent Teams
+### Команди агентів
 
-Agent Teams coordinate multiple agents working on related tasks. Rather than delegating to one subagent at a time, Agent Teams allow the main agent to orchestrate a group of agents that collaborate, share intermediate results, and work toward a common goal. This is useful for large-scale tasks like full-stack feature development where a frontend agent, backend agent, and testing agent work in parallel.
+Команди агентів координують кількох агентів, що працюють над пов'язаними завданнями. Замість делегування одному субагенту за раз, команди агентів дозволяють основному агенту оркеструвати групу агентів, які співпрацюють, обмінюються проміжними результатами та працюють над спільною метою. Це корисно для масштабних завдань, таких як повноцінна розробка фічі, де фронтенд-агент, бекенд-агент та агент тестування працюють паралельно.
 
 ---
 
-## Memory
+## Пам'ять
 
-### Overview
+### Огляд
 
-Memory enables Claude to retain context across sessions and conversations. It exists in two forms: automatic synthesis in claude.ai, and filesystem-based CLAUDE.md in Claude Code.
+Пам'ять дозволяє Claude зберігати контекст між сесіями та розмовами. Вона існує у двох формах: автоматичний синтез у claude.ai та файлова система CLAUDE.md у Claude Code.
 
-### Memory Architecture
+### Архітектура пам'яті
 
 ```mermaid
 graph TB
@@ -561,9 +561,9 @@ graph TB
     A -->|Uses context| C
 ```
 
-### Memory Hierarchy in Claude Code (7 Tiers)
+### Ієрархія пам'яті в Claude Code (7 рівнів)
 
-Claude Code loads memory from 7 tiers, listed from highest to lowest priority:
+Claude Code завантажує пам'ять із 7 рівнів, від найвищого до найнижчого пріоритету:
 
 ```mermaid
 graph TD
@@ -583,30 +583,30 @@ graph TD
     style G fill:#fff3e0,stroke:#333,color:#333
 ```
 
-### Memory Locations Table
+### Таблиця розташування пам'яті
 
-| Tier | Location | Scope | Priority | Shared | Best For |
+| Рівень | Розташування | Область | Пріоритет | Спільний | Найкраще для |
 |------|----------|-------|----------|--------|----------|
-| 1. Managed Policy | Enterprise admin | Organization | Highest | All org users | Compliance, security policies |
-| 2. Project | `./CLAUDE.md` | Project | High | Team (Git) | Team standards, architecture |
-| 3. Project Rules | `.claude/rules/*.md` | Project | High | Team (Git) | Modular project conventions |
-| 4. User | `~/.claude/CLAUDE.md` | Personal | Medium | Individual | Personal preferences |
-| 5. User Rules | `~/.claude/rules/*.md` | Personal | Medium | Individual | Personal rule modules |
-| 6. Local | `.claude/local/CLAUDE.md` | Local | Low | Not shared | Machine-specific settings |
-| 7. Auto Memory | Automatic | Session | Lowest | Individual | Learned preferences, patterns |
+| 1. Керована політика | Адмін підприємства | Організація | Найвищий | Усі користувачі орг. | Відповідність, політики безпеки |
+| 2. Проєкт | `./CLAUDE.md` | Проєкт | Високий | Команда (Git) | Стандарти команди, архітектура |
+| 3. Правила проєкту | `.claude/rules/*.md` | Проєкт | Високий | Команда (Git) | Модульні конвенції проєкту |
+| 4. Користувач | `~/.claude/CLAUDE.md` | Персональний | Середній | Індивідуальний | Особисті налаштування |
+| 5. Правила користувача | `~/.claude/rules/*.md` | Персональний | Середній | Індивідуальний | Персональні модулі правил |
+| 6. Локальний | `.claude/local/CLAUDE.md` | Локальний | Низький | Не спільний | Налаштування конкретної машини |
+| 7. Авто-пам'ять | Автоматичний | Сесія | Найнижчий | Індивідуальний | Засвоєні вподобання, патерни |
 
-### Auto Memory
+### Авто-пам'ять
 
-Auto Memory automatically captures user preferences and patterns observed during sessions. Claude learns from your interactions and remembers:
+Авто-пам'ять автоматично фіксує вподобання користувача та патерни, виявлені під час сесій. Claude навчається з ваших взаємодій і запам'ятовує:
 
-- Coding style preferences
-- Common corrections you make
-- Framework and tool choices
-- Communication style preferences
+- Вподобання стилю кодування
+- Типові виправлення, які ви робите
+- Вибір фреймворків та інструментів
+- Вподобання стилю комунікації
 
-Auto Memory works in the background and does not require manual configuration.
+Авто-пам'ять працює у фоновому режимі і не потребує ручного налаштування.
 
-### Memory Update Lifecycle
+### Життєвий цикл оновлення пам'яті
 
 ```mermaid
 sequenceDiagram
@@ -625,11 +625,11 @@ sequenceDiagram
     Claude-->>User: "Memory saved!"
 ```
 
-### Practical Examples
+### Практичні приклади
 
-#### Example 1: Project Memory Structure
+#### Приклад 1: Структура пам'яті проєкту
 
-**File:** `./CLAUDE.md`
+**Файл:** `./CLAUDE.md`
 
 ```markdown
 # Project Configuration
@@ -722,9 +722,9 @@ sequenceDiagram
 - Admin Panel: `/projects/admin`
 ```
 
-#### Example 2: Directory-Specific Memory
+#### Приклад 2: Пам'ять для конкретного каталогу
 
-**File:** `./src/api/CLAUDE.md`
+**Файл:** `./src/api/CLAUDE.md`
 
 ~~~~markdown
 # API Module Standards
@@ -790,9 +790,9 @@ All responses must follow this structure:
 - Tag cache keys with resource type
 ~~~~
 
-#### Example 3: Personal Memory
+#### Приклад 3: Персональна пам'ять
 
-**File:** `~/.claude/CLAUDE.md`
+**Файл:** `~/.claude/CLAUDE.md`
 
 ~~~~markdown
 # My Development Preferences
@@ -857,9 +857,9 @@ project/
 - **Test Framework**: Jest with React Testing Library
 ~~~~
 
-#### Example 4: Memory Update During Session
+#### Приклад 4: Оновлення пам'яті під час сесії
 
-**Session Interaction:**
+**Взаємодія в сесії:**
 
 ```markdown
 User: Remember that I prefer using React hooks instead of class components
@@ -884,9 +884,9 @@ Added to ./CLAUDE.md:
 - Use useMemo for expensive computations
 ```
 
-### Memory in Claude Web/Desktop
+### Пам'ять у Claude Web/Desktop
 
-#### Memory Synthesis Timeline
+#### Хронологія синтезу пам'яті
 
 ```mermaid
 graph LR
@@ -897,7 +897,7 @@ graph LR
     E -->|24 hours later| F["Memory Refreshed"]
 ```
 
-**Example Memory Summary:**
+**Приклад підсумку пам'яті:**
 
 ```markdown
 ## Claude's Memory of User
@@ -927,27 +927,27 @@ graph LR
 - Document architecture
 ```
 
-### Memory Features Comparison
+### Порівняння функцій пам'яті
 
-| Feature | Claude Web/Desktop | Claude Code (CLAUDE.md) |
+| Функція | Claude Web/Desktop | Claude Code (CLAUDE.md) |
 |---------|-------------------|------------------------|
-| Auto-synthesis | ✅ Every 24h | ❌ Manual |
-| Cross-project | ✅ Shared | ❌ Project-specific |
-| Team access | ✅ Shared projects | ✅ Git-tracked |
-| Searchable | ✅ Built-in | ✅ Through `/memory` |
-| Editable | ✅ In-chat | ✅ Direct file edit |
-| Import/Export | ✅ Yes | ✅ Copy/paste |
-| Persistent | ✅ 24h+ | ✅ Indefinite |
+| Авто-синтез | ✅ Кожні 24 год | ❌ Вручну |
+| Між проєктами | ✅ Спільний | ❌ Специфічний для проєкту |
+| Доступ команди | ✅ Спільні проєкти | ✅ Через Git |
+| Пошук | ✅ Вбудований | ✅ Через `/memory` |
+| Редагування | ✅ У чаті | ✅ Пряме редагування файлу |
+| Імпорт/Експорт | ✅ Так | ✅ Копіювання/вставка |
+| Постійність | ✅ 24 год+ | ✅ Необмежено |
 
 ---
 
-## MCP Protocol
+## Протокол MCP
 
-### Overview
+### Огляд
 
-MCP (Model Context Protocol) is a standardized way for Claude to access external tools, APIs, and real-time data sources. Unlike Memory, MCP provides live access to changing data.
+MCP (Model Context Protocol) — це стандартизований спосіб доступу Claude до зовнішніх інструментів, API та джерел даних у реальному часі. На відміну від пам'яті, MCP забезпечує живий доступ до змінюваних даних.
 
-### MCP Architecture
+### Архітектура MCP
 
 ```mermaid
 graph TB
@@ -966,7 +966,7 @@ graph TB
     B -->|Response| A
 ```
 
-### MCP Ecosystem
+### Екосистема MCP
 
 ```mermaid
 graph TB
@@ -983,7 +983,7 @@ graph TB
     F -->|Docs| K["Google Drive"]
 ```
 
-### MCP Setup Process
+### Процес налаштування MCP
 
 ```mermaid
 sequenceDiagram
@@ -1003,24 +1003,24 @@ sequenceDiagram
     Claude->>User: ✅ MCP connected!
 ```
 
-### Available MCP Servers Table
+### Таблиця доступних MCP-серверів
 
-| MCP Server | Purpose | Common Tools | Auth | Real-time |
+| MCP-сервер | Призначення | Основні інструменти | Авторизація | Реальний час |
 |------------|---------|--------------|------|-----------|
-| **Filesystem** | File operations | read, write, delete | OS permissions | ✅ Yes |
-| **GitHub** | Repository management | list_prs, create_issue, push | OAuth | ✅ Yes |
-| **Slack** | Team communication | send_message, list_channels | Token | ✅ Yes |
-| **Database** | SQL queries | query, insert, update | Credentials | ✅ Yes |
-| **Google Docs** | Document access | read, write, share | OAuth | ✅ Yes |
-| **Asana** | Project management | create_task, update_status | API Key | ✅ Yes |
-| **Stripe** | Payment data | list_charges, create_invoice | API Key | ✅ Yes |
-| **Memory** | Persistent memory | store, retrieve, delete | Local | ❌ No |
+| **Filesystem** | Файлові операції | read, write, delete | Права ОС | ✅ Так |
+| **GitHub** | Управління репозиторіями | list_prs, create_issue, push | OAuth | ✅ Так |
+| **Slack** | Командна комунікація | send_message, list_channels | Token | ✅ Так |
+| **Database** | SQL-запити | query, insert, update | Облікові дані | ✅ Так |
+| **Google Docs** | Доступ до документів | read, write, share | OAuth | ✅ Так |
+| **Asana** | Управління проєктами | create_task, update_status | API Key | ✅ Так |
+| **Stripe** | Платіжні дані | list_charges, create_invoice | API Key | ✅ Так |
+| **Memory** | Постійна пам'ять | store, retrieve, delete | Локальний | ❌ Ні |
 
-### Practical Examples
+### Практичні приклади
 
-#### Example 1: GitHub MCP Configuration
+#### Приклад 1: Конфігурація GitHub MCP
 
-**File:** `.mcp.json` (project scope) or `~/.claude.json` (user scope)
+**Файл:** `.mcp.json` (область проєкту) або `~/.claude.json` (область користувача)
 
 ```json
 {
@@ -1036,7 +1036,7 @@ sequenceDiagram
 }
 ```
 
-**Available GitHub MCP Tools:**
+**Доступні інструменти GitHub MCP:**
 
 ~~~~markdown
 # GitHub MCP Tools
@@ -1080,9 +1080,9 @@ Reviewers: @bob, @charlie
 - `create_commit` - Create new commit
 ~~~~
 
-#### Example 2: Database MCP Setup
+#### Приклад 2: Налаштування Database MCP
 
-**Configuration:**
+**Конфігурація:**
 
 ```json
 {
@@ -1098,7 +1098,7 @@ Reviewers: @bob, @charlie
 }
 ```
 
-**Example Usage:**
+**Приклад використання:**
 
 ```markdown
 User: Fetch all users with more than 10 orders
@@ -1119,9 +1119,9 @@ ORDER BY order_count DESC;
 - Charlie: 11 orders
 ```
 
-#### Example 3: Multi-MCP Workflow
+#### Приклад 3: Робочий процес з кількома MCP
 
-**Scenario: Daily Report Generation**
+**Сценарій: Генерація щоденного звіту**
 
 ```markdown
 # Daily Report Workflow using Multiple MCPs
@@ -1166,9 +1166,9 @@ Final Output:
 💰 $12,450 in daily sales
 ```
 
-#### Example 4: Filesystem MCP Operations
+#### Приклад 4: Операції Filesystem MCP
 
-**Configuration:**
+**Конфігурація:**
 
 ```json
 {
@@ -1181,18 +1181,18 @@ Final Output:
 }
 ```
 
-**Available Operations:**
+**Доступні операції:**
 
-| Operation | Command | Purpose |
+| Операція | Команда | Призначення |
 |-----------|---------|---------|
-| List files | `ls ~/projects` | Show directory contents |
-| Read file | `cat src/main.ts` | Read file contents |
-| Write file | `create docs/api.md` | Create new file |
-| Edit file | `edit src/app.ts` | Modify file |
-| Search | `grep "async function"` | Search in files |
-| Delete | `rm old-file.js` | Delete file |
+| Список файлів | `ls ~/projects` | Показати вміст каталогу |
+| Читання файлу | `cat src/main.ts` | Прочитати вміст файлу |
+| Запис файлу | `create docs/api.md` | Створити новий файл |
+| Редагування файлу | `edit src/app.ts` | Змінити файл |
+| Пошук | `grep "async function"` | Пошук у файлах |
+| Видалення | `rm old-file.js` | Видалити файл |
 
-### MCP vs Memory: Decision Matrix
+### MCP проти пам'яті: Матриця рішень
 
 ```mermaid
 graph TD
@@ -1209,7 +1209,7 @@ graph TD
     style D fill:#fff9c4
 ```
 
-### Request/Response Pattern
+### Патерн запит/відповідь
 
 ```mermaid
 sequenceDiagram
@@ -1229,13 +1229,13 @@ sequenceDiagram
 
 ---
 
-## Agent Skills
+## Навички агентів
 
-### Overview
+### Огляд
 
-Agent Skills are reusable, model-invoked capabilities packaged as folders containing instructions, scripts, and resources. Claude automatically detects and uses relevant skills.
+Навички агентів — це повторно використовувані можливості, що викликаються моделлю, упаковані як теки з інструкціями, скриптами та ресурсами. Claude автоматично виявляє та використовує відповідні навички.
 
-### Skill Architecture
+### Архітектура навичок
 
 ```mermaid
 graph TB
@@ -1253,7 +1253,7 @@ graph TB
     F --> A
 ```
 
-### Skill Loading Process
+### Процес завантаження навички
 
 ```mermaid
 sequenceDiagram
@@ -1272,16 +1272,16 @@ sequenceDiagram
     Claude->>User: Generate Excel file
 ```
 
-### Skill Types & Locations Table
+### Таблиця типів та розташування навичок
 
-| Type | Location | Scope | Shared | Sync | Best For |
+| Тип | Розташування | Область | Спільний | Синхронізація | Найкраще для |
 |------|----------|-------|--------|------|----------|
-| Pre-built | Built-in | Global | All users | Auto | Document creation |
-| Personal | `~/.claude/skills/` | Individual | No | Manual | Personal automation |
-| Project | `.claude/skills/` | Team | Yes | Git | Team standards |
-| Plugin | Via plugin install | Varies | Depends | Auto | Integrated features |
+| Вбудовані | Built-in | Глобальний | Усі користувачі | Авто | Створення документів |
+| Персональні | `~/.claude/skills/` | Індивідуальний | Ні | Вручну | Персональна автоматизація |
+| Проєктні | `.claude/skills/` | Команда | Так | Git | Стандарти команди |
+| Плагінні | Через встановлення плагіна | Різний | Залежить | Авто | Інтегровані функції |
 
-### Pre-built Skills
+### Вбудовані навички
 
 ```mermaid
 graph TB
@@ -1306,25 +1306,25 @@ graph TB
     E --> E2["Fill forms"]
 ```
 
-### Bundled Skills
+### Комплектні навички
 
-Claude Code now includes 5 bundled skills available out of the box:
+Claude Code тепер включає 5 комплектних навичок, доступних одразу:
 
-| Skill | Command | Purpose |
+| Навичка | Команда | Призначення |
 |-------|---------|---------|
-| **Simplify** | `/simplify` | Simplify complex code or explanations |
-| **Batch** | `/batch` | Run operations across multiple files or items |
-| **Debug** | `/debug` | Systematic debugging of issues with root cause analysis |
-| **Loop** | `/loop` | Schedule recurring tasks on a timer |
-| **Claude API** | `/claude-api` | Interact with the Anthropic API directly |
+| **Simplify** | `/simplify` | Спрощення складного коду або пояснень |
+| **Batch** | `/batch` | Виконання операцій над кількома файлами або елементами |
+| **Debug** | `/debug` | Систематичне налагодження з аналізом кореневої причини |
+| **Loop** | `/loop` | Планування повторюваних завдань за таймером |
+| **Claude API** | `/claude-api` | Пряма взаємодія з Anthropic API |
 
-These bundled skills are always available and do not require installation or configuration.
+Ці комплектні навички завжди доступні і не потребують встановлення або конфігурації.
 
-### Practical Examples
+### Практичні приклади
 
-#### Example 1: Custom Code Review Skill
+#### Приклад 1: Навичка код-рев'ю
 
-**Directory Structure:**
+**Структура каталогу:**
 
 ```
 ~/.claude/skills/code-review/
@@ -1337,7 +1337,7 @@ These bundled skills are always available and do not require installation or con
     └── compare-complexity.py
 ```
 
-**File:** `~/.claude/skills/code-review/SKILL.md`
+**Файл:** `~/.claude/skills/code-review/SKILL.md`
 
 ```yaml
 ---
@@ -1832,9 +1832,9 @@ const users = fetchUsersWithPosts(); // 1 query
 - Props should have TypeScript types
 ~~~~
 
-#### Example 2: Brand Voice Skill
+#### Приклад 2: Навичка голосу бренду
 
-**Directory Structure:**
+**Структура каталогу:**
 
 ```
 .claude/skills/brand-voice/
@@ -1847,7 +1847,7 @@ const users = fetchUsersWithPosts(); // 1 query
     └── blog-post-template.md
 ```
 
-**File:** `.claude/skills/brand-voice/SKILL.md`
+**Файл:** `.claude/skills/brand-voice/SKILL.md`
 
 ```yaml
 ---
@@ -1971,9 +1971,9 @@ Educational blog post:
 "Let's explore how agents improve code review workflows. Here's what we learned..."
 ```
 
-#### Example 3: Documentation Generator Skill
+#### Приклад 3: Навичка генерації документації
 
-**File:** `.claude/skills/doc-generator/SKILL.md`
+**Файл:** `.claude/skills/doc-generator/SKILL.md`
 
 ~~~~yaml
 ---
@@ -2115,7 +2115,7 @@ if __name__ == '__main__':
     markdown = generate_markdown_docs(extractor.endpoints)
     print(markdown)
 ~~~~
-### Skill Discovery & Invocation
+### Виявлення та виклик навичок
 
 ```mermaid
 graph TD
@@ -2131,7 +2131,7 @@ graph TD
     I --> J["Return Results"]
 ```
 
-### Skill vs Other Features
+### Навички проти інших функцій
 
 ```mermaid
 graph TB
@@ -2157,13 +2157,13 @@ graph TB
 
 ---
 
-## Claude Code Plugins
+## Плагіни Claude Code
 
-### Overview
+### Огляд
 
-Claude Code Plugins are bundled collections of customizations (slash commands, subagents, MCP servers, and hooks) that install with a single command. They represent the highest-level extension mechanism—combining multiple features into cohesive, shareable packages.
+Плагіни Claude Code — це комплектні збірки налаштувань (слеш-команди, субагенти, MCP-сервери та хуки), які встановлюються однією командою. Вони представляють найвищий рівень механізму розширення — об'єднують кілька функцій у цілісні пакети, якими можна ділитися.
 
-### Architecture
+### Архітектура
 
 ```mermaid
 graph TB
@@ -2181,7 +2181,7 @@ graph TB
     A -->|bundles| F
 ```
 
-### Plugin Loading Process
+### Процес завантаження плагіна
 
 ```mermaid
 sequenceDiagram
@@ -2210,16 +2210,16 @@ sequenceDiagram
     Tools-->>Claude: Plugin installed ✅
 ```
 
-### Plugin Types & Distribution
+### Типи та дистрибуція плагінів
 
-| Type | Scope | Shared | Authority | Examples |
+| Тип | Область | Спільний | Авторитет | Приклади |
 |------|-------|--------|-----------|----------|
-| Official | Global | All users | Anthropic | PR Review, Security Guidance |
-| Community | Public | All users | Community | DevOps, Data Science |
-| Organization | Internal | Team members | Company | Internal standards, tools |
-| Personal | Individual | Single user | Developer | Custom workflows |
+| Офіційний | Глобальний | Усі користувачі | Anthropic | PR Review, Security Guidance |
+| Спільноти | Публічний | Усі користувачі | Спільнота | DevOps, Data Science |
+| Організаційний | Внутрішній | Члени команди | Компанія | Внутрішні стандарти, інструменти |
+| Персональний | Індивідуальний | Один користувач | Розробник | Користувацькі робочі процеси |
 
-### Plugin Definition Structure
+### Структура визначення плагіна
 
 ```yaml
 ---
@@ -2256,7 +2256,7 @@ config:
 ---
 ```
 
-### Plugin Structure
+### Структура плагіна
 
 ```
 my-plugin/
@@ -2290,11 +2290,11 @@ my-plugin/
     └── plugin.test.js
 ```
 
-### Practical Examples
+### Практичні приклади
 
-#### Example 1: PR Review Plugin
+#### Приклад 1: Плагін код-рев'ю PR
 
-**File:** `.claude-plugin/plugin.json`
+**Файл:** `.claude-plugin/plugin.json`
 
 ```json
 {
@@ -2308,7 +2308,7 @@ my-plugin/
 }
 ```
 
-**File:** `commands/review-pr.md`
+**Файл:** `commands/review-pr.md`
 
 ```markdown
 ---
@@ -2327,7 +2327,7 @@ This command initiates a complete pull request review including:
 5. Performance impact assessment
 ```
 
-**File:** `agents/security-reviewer.md`
+**Файл:** `agents/security-reviewer.md`
 
 ```yaml
 ---
@@ -2345,7 +2345,7 @@ Specializes in finding security vulnerabilities:
 - Secure configuration
 ```
 
-**Installation:**
+**Встановлення:**
 
 ```bash
 /plugin install pr-review
@@ -2358,9 +2358,9 @@ Specializes in finding security vulnerabilities:
 # ✅ Ready to use!
 ```
 
-#### Example 2: DevOps Plugin
+#### Приклад 2: Плагін DevOps
 
-**Components:**
+**Компоненти:**
 
 ```
 devops-automation/
@@ -2387,9 +2387,9 @@ devops-automation/
     └── health-check.sh
 ```
 
-#### Example 3: Documentation Plugin
+#### Приклад 3: Плагін документації
 
-**Bundled Components:**
+**Комплектні компоненти:**
 
 ```
 documentation/
@@ -2411,7 +2411,7 @@ documentation/
     └── adr-template.md
 ```
 
-### Plugin Marketplace
+### Маркетплейс плагінів
 
 ```mermaid
 graph TB
@@ -2437,7 +2437,7 @@ graph TB
     D -->|Internal| D3["Compliance"]
 ```
 
-### Plugin Installation & Lifecycle
+### Встановлення та життєвий цикл плагіна
 
 ```mermaid
 graph LR
@@ -2454,33 +2454,33 @@ graph LR
     J -->|Back| G
 ```
 
-### Plugin Features Comparison
+### Порівняння функцій плагінів
 
-| Feature | Slash Command | Skill | Subagent | Plugin |
+| Функція | Слеш-команда | Навичка | Субагент | Плагін |
 |---------|---------------|-------|----------|--------|
-| **Installation** | Manual copy | Manual copy | Manual config | One command |
-| **Setup Time** | 5 minutes | 10 minutes | 15 minutes | 2 minutes |
-| **Bundling** | Single file | Single file | Single file | Multiple |
-| **Versioning** | Manual | Manual | Manual | Automatic |
-| **Team Sharing** | Copy file | Copy file | Copy file | Install ID |
-| **Updates** | Manual | Manual | Manual | Auto-available |
-| **Dependencies** | None | None | None | May include |
-| **Marketplace** | No | No | No | Yes |
-| **Distribution** | Repository | Repository | Repository | Marketplace |
+| **Встановлення** | Ручне копіювання | Ручне копіювання | Ручна конфігурація | Одна команда |
+| **Час налаштування** | 5 хвилин | 10 хвилин | 15 хвилин | 2 хвилини |
+| **Комплектність** | Один файл | Один файл | Один файл | Кілька |
+| **Версіонування** | Вручну | Вручну | Вручну | Автоматичне |
+| **Поширення в команді** | Копіювати файл | Копіювати файл | Копіювати файл | ID встановлення |
+| **Оновлення** | Вручну | Вручну | Вручну | Авто-доступне |
+| **Залежності** | Немає | Немає | Немає | Можуть бути |
+| **Маркетплейс** | Ні | Ні | Ні | Так |
+| **Дистрибуція** | Репозиторій | Репозиторій | Репозиторій | Маркетплейс |
 
-### Plugin Use Cases
+### Сценарії використання плагінів
 
-| Use Case | Recommendation | Why |
+| Сценарій використання | Рекомендація | Чому |
 |----------|-----------------|-----|
-| **Team Onboarding** | ✅ Use Plugin | Instant setup, all configurations |
-| **Framework Setup** | ✅ Use Plugin | Bundles framework-specific commands |
-| **Enterprise Standards** | ✅ Use Plugin | Central distribution, version control |
-| **Quick Task Automation** | ❌ Use Command | Overkill complexity |
-| **Single Domain Expertise** | ❌ Use Skill | Too heavy, use skill instead |
-| **Specialized Analysis** | ❌ Use Subagent | Create manually or use skill |
-| **Live Data Access** | ❌ Use MCP | Standalone, don't bundle |
+| **Онбординг команди** | ✅ Використовуйте плагін | Миттєве налаштування, усі конфігурації |
+| **Налаштування фреймворку** | ✅ Використовуйте плагін | Комплектує команди, специфічні для фреймворку |
+| **Корпоративні стандарти** | ✅ Використовуйте плагін | Централізована дистрибуція, контроль версій |
+| **Швидка автоматизація задач** | ❌ Використовуйте команду | Надмірна складність |
+| **Одна предметна область** | ❌ Використовуйте навичку | Занадто важкий, краще навичка |
+| **Спеціалізований аналіз** | ❌ Використовуйте субагента | Створіть вручну або використовуйте навичку |
+| **Доступ до живих даних** | ❌ Використовуйте MCP | Автономний, не комплектуйте |
 
-### When to Create a Plugin
+### Коли створювати плагін
 
 ```mermaid
 graph TD
@@ -2496,20 +2496,20 @@ graph TD
     G -->|No| D
 ```
 
-### Publishing a Plugin
+### Публікація плагіна
 
-**Steps to publish:**
+**Кроки для публікації:**
 
-1. Create plugin structure with all components
-2. Write `.claude-plugin/plugin.json` manifest
-3. Create `README.md` with documentation
-4. Test locally with `/plugin install ./my-plugin`
-5. Submit to plugin marketplace
-6. Get reviewed and approved
-7. Published on marketplace
-8. Users can install with one command
+1. Створіть структуру плагіна з усіма компонентами
+2. Напишіть маніфест `.claude-plugin/plugin.json`
+3. Створіть `README.md` з документацією
+4. Протестуйте локально за допомогою `/plugin install ./my-plugin`
+5. Надішліть на маркетплейс плагінів
+6. Пройдіть перевірку та затвердження
+7. Опубліковано на маркетплейсі
+8. Користувачі можуть встановити однією командою
 
-**Example submission:**
+**Приклад подачі:**
 
 ~~~~markdown
 # PR Review Plugin
@@ -2548,17 +2548,17 @@ Complete PR review workflow with security, testing, and documentation checks.
 - CodeQL (optional)
 ~~~~
 
-### Plugin vs Manual Configuration
+### Плагін проти ручної конфігурації
 
-**Manual Setup (2+ hours):**
-- Install slash commands one by one
-- Create subagents individually
-- Configure MCPs separately
-- Set up hooks manually
-- Document everything
-- Share with team (hope they configure correctly)
+**Ручне налаштування (2+ години):**
+- Встановити слеш-команди одну за одною
+- Створити субагентів окремо
+- Налаштувати MCP окремо
+- Налаштувати хуки вручну
+- Задокументувати все
+- Поширити в команді (сподіваючись на правильну конфігурацію)
 
-**With Plugin (2 minutes):**
+**З плагіном (2 хвилини):**
 ```bash
 /plugin install pr-review
 # ✅ Everything installed and configured
@@ -2568,19 +2568,19 @@ Complete PR review workflow with security, testing, and documentation checks.
 
 ---
 
-## Comparison & Integration
+## Порівняння та інтеграція
 
-### Feature Comparison Matrix
+### Матриця порівняння функцій
 
-| Feature | Invocation | Persistence | Scope | Use Case |
+| Функція | Виклик | Постійність | Область | Сценарій використання |
 |---------|-----------|------------|-------|----------|
-| **Slash Commands** | Manual (`/cmd`) | Session only | Single command | Quick shortcuts |
-| **Subagents** | Auto-delegated | Isolated context | Specialized task | Task distribution |
-| **Memory** | Auto-loaded | Cross-session | User/team context | Long-term learning |
-| **MCP Protocol** | Auto-queried | Real-time external | Live data access | Dynamic information |
-| **Skills** | Auto-invoked | Filesystem-based | Reusable expertise | Automated workflows |
+| **Слеш-команди** | Ручний (`/cmd`) | Лише сесія | Одна команда | Швидкі ярлики |
+| **Субагенти** | Авто-делеговані | Ізольований контекст | Спеціалізоване завдання | Розподіл завдань |
+| **Пам'ять** | Авто-завантажена | Між сесіями | Контекст користувача/команди | Довгострокове навчання |
+| **Протокол MCP** | Авто-запити | Реальний час, зовнішній | Доступ до живих даних | Динамічна інформація |
+| **Навички** | Авто-викликані | На основі файлової системи | Повторно використовувана експертиза | Автоматизовані робочі процеси |
 
-### Interaction Timeline
+### Хронологія взаємодії
 
 ```mermaid
 graph LR
@@ -2601,9 +2601,9 @@ graph LR
     J -->|Uses| B
 ```
 
-### Practical Integration Example: Customer Support Automation
+### Практичний приклад інтеграції: Автоматизація підтримки клієнтів
 
-#### Architecture
+#### Архітектура
 
 ```mermaid
 graph TB
@@ -2629,7 +2629,7 @@ graph TB
     Output -->|Send| Reply["Customer Reply"]
 ```
 
-#### Request Flow
+#### Потік запитів
 
 ```markdown
 ## Customer Support Request Flow
@@ -2682,7 +2682,7 @@ Customer receives:
 - Link to related issues
 ```
 
-### Complete Feature Orchestration
+### Повна оркестрація функцій
 
 ```mermaid
 sequenceDiagram
@@ -2709,7 +2709,7 @@ sequenceDiagram
     Claude->>User: Complete system delivered
 ```
 
-### When to Use Each Feature
+### Коли використовувати кожну функцію
 
 ```mermaid
 graph TD
@@ -2728,7 +2728,7 @@ graph TD
     G --> G1["✅ Auto-invoked expertise"]
 ```
 
-### Selection Decision Tree
+### Дерево рішень для вибору
 
 ```mermaid
 graph TD
@@ -2753,94 +2753,94 @@ graph TD
 
 ---
 
-## Summary Table
+## Зведена таблиця
 
-| Aspect | Slash Commands | Subagents | Memory | MCP | Skills | Plugins |
+| Аспект | Слеш-команди | Субагенти | Пам'ять | MCP | Навички | Плагіни |
 |--------|---|---|---|---|---|---|
-| **Setup Difficulty** | Easy | Medium | Easy | Medium | Medium | Easy |
-| **Learning Curve** | Low | Medium | Low | Medium | Medium | Low |
-| **Team Benefit** | High | High | Medium | High | High | Very High |
-| **Automation Level** | Low | High | Medium | High | High | Very High |
-| **Context Management** | Single-session | Isolated | Persistent | Real-time | Persistent | All features |
-| **Maintenance Burden** | Low | Medium | Low | Medium | Medium | Low |
-| **Scalability** | Good | Excellent | Good | Excellent | Excellent | Excellent |
-| **Shareability** | Fair | Fair | Good | Good | Good | Excellent |
-| **Versioning** | Manual | Manual | Manual | Manual | Manual | Automatic |
-| **Installation** | Manual copy | Manual config | N/A | Manual config | Manual copy | One command |
+| **Складність налаштування** | Легко | Середньо | Легко | Середньо | Середньо | Легко |
+| **Крива навчання** | Низька | Середня | Низька | Середня | Середня | Низька |
+| **Користь для команди** | Висока | Висока | Середня | Висока | Висока | Дуже висока |
+| **Рівень автоматизації** | Низький | Високий | Середній | Високий | Високий | Дуже високий |
+| **Управління контекстом** | Одна сесія | Ізольований | Постійний | Реальний час | Постійний | Усі функції |
+| **Навантаження з обслуговування** | Низьке | Середнє | Низьке | Середнє | Середнє | Низьке |
+| **Масштабованість** | Добра | Відмінна | Добра | Відмінна | Відмінна | Відмінна |
+| **Можливість поширення** | Задовільна | Задовільна | Добра | Добра | Добра | Відмінна |
+| **Версіонування** | Вручну | Вручну | Вручну | Вручну | Вручну | Автоматичне |
+| **Встановлення** | Ручне копіювання | Ручна конфігурація | Н/Д | Ручна конфігурація | Ручне копіювання | Одна команда |
 
 ---
 
-## Quick Start Guide
+## Короткий посібник для початку
 
-### Week 1: Start Simple
-- Create 2-3 slash commands for common tasks
-- Enable Memory in Settings
-- Document team standards in CLAUDE.md
+### Тиждень 1: Почніть просто
+- Створіть 2-3 слеш-команди для типових завдань
+- Увімкніть пам'ять у налаштуваннях
+- Задокументуйте стандарти команди в CLAUDE.md
 
-### Week 2: Add Real-time Access
-- Set up 1 MCP (GitHub or Database)
-- Use `/mcp` to configure
-- Query live data in your workflows
+### Тиждень 2: Додайте доступ у реальному часі
+- Налаштуйте 1 MCP (GitHub або Database)
+- Використовуйте `/mcp` для конфігурації
+- Запитуйте живі дані у ваших робочих процесах
 
-### Week 3: Distribute Work
-- Create first Subagent for specific role
-- Use `/agents` command
-- Test delegation with simple task
+### Тиждень 3: Розподіліть роботу
+- Створіть першого субагента для конкретної ролі
+- Використовуйте команду `/agents`
+- Протестуйте делегування з простим завданням
 
-### Week 4: Automate Everything
-- Create first Skill for repeated automation
-- Use Skill marketplace or build custom
-- Combine all features for full workflow
+### Тиждень 4: Автоматизуйте все
+- Створіть першу навичку для повторюваної автоматизації
+- Використовуйте маркетплейс навичок або створіть власну
+- Об'єднайте усі функції для повного робочого процесу
 
-### Ongoing
-- Review and update Memory monthly
-- Add new Skills as patterns emerge
-- Optimize MCP queries
-- Refine Subagent prompts
+### Постійно
+- Переглядайте та оновлюйте пам'ять щомісяця
+- Додавайте нові навички за потребою
+- Оптимізуйте MCP-запити
+- Вдосконалюйте промпти субагентів
 
 ---
 
-## Hooks
+## Хуки
 
-### Overview
+### Огляд
 
-Hooks are event-driven shell commands that execute automatically in response to Claude Code events. They enable automation, validation, and custom workflows without manual intervention.
+Хуки — це shell-команди на основі подій, які виконуються автоматично у відповідь на події Claude Code. Вони забезпечують автоматизацію, валідацію та користувацькі робочі процеси без ручного втручання.
 
-### Hook Events
+### Події хуків
 
-Claude Code supports **25 hook events** across four hook types (command, http, prompt, agent):
+Claude Code підтримує **25 подій хуків** у чотирьох типах хуків (command, http, prompt, agent):
 
-| Hook Event | Trigger | Use Cases |
+| Подія хука | Тригер | Сценарії використання |
 |------------|---------|-----------|
-| **SessionStart** | Session begins/resumes/clear/compact | Environment setup, initialization |
-| **InstructionsLoaded** | CLAUDE.md or rules file loaded | Validation, transformation, augmentation |
-| **UserPromptSubmit** | User submits prompt | Input validation, prompt filtering |
-| **PreToolUse** | Before any tool runs | Validation, approval gates, logging |
-| **PermissionRequest** | Permission dialog shown | Auto-approve/deny flows |
-| **PostToolUse** | After tool succeeds | Auto-formatting, notifications, cleanup |
-| **PostToolUseFailure** | Tool execution fails | Error handling, logging |
-| **Notification** | Notification sent | Alerting, external integrations |
-| **SubagentStart** | Subagent spawned | Context injection, initialization |
-| **SubagentStop** | Subagent finishes | Result validation, logging |
-| **Stop** | Claude finishes responding | Summary generation, cleanup tasks |
-| **StopFailure** | API error ends turn | Error recovery, logging |
-| **TeammateIdle** | Agent team teammate idle | Work distribution, coordination |
-| **TaskCompleted** | Task marked complete | Post-task processing |
-| **TaskCreated** | Task created via TaskCreate | Task tracking, logging |
-| **ConfigChange** | Config file changes | Validation, propagation |
-| **CwdChanged** | Working directory changes | Directory-specific setup |
-| **FileChanged** | Watched file changes | File monitoring, rebuild triggers |
-| **PreCompact** | Before context compaction | State preservation |
-| **PostCompact** | After compaction completes | Post-compact actions |
-| **WorktreeCreate** | Worktree being created | Environment setup, dependency install |
-| **WorktreeRemove** | Worktree being removed | Cleanup, resource deallocation |
-| **Elicitation** | MCP server requests user input | Input validation |
-| **ElicitationResult** | User responds to elicitation | Response processing |
-| **SessionEnd** | Session terminates | Cleanup, final logging |
+| **SessionStart** | Початок/відновлення/очищення/ущільнення сесії | Налаштування середовища, ініціалізація |
+| **InstructionsLoaded** | Завантажено CLAUDE.md або файл правил | Валідація, трансформація, доповнення |
+| **UserPromptSubmit** | Користувач надсилає промпт | Валідація вводу, фільтрація промптів |
+| **PreToolUse** | Перед запуском будь-якого інструменту | Валідація, шлюзи затвердження, логування |
+| **PermissionRequest** | Показано діалог дозволу | Авто-затвердження/відхилення |
+| **PostToolUse** | Після успішного виконання інструменту | Авто-форматування, сповіщення, очищення |
+| **PostToolUseFailure** | Помилка виконання інструменту | Обробка помилок, логування |
+| **Notification** | Надіслано сповіщення | Алертинг, зовнішні інтеграції |
+| **SubagentStart** | Створено субагента | Ін'єкція контексту, ініціалізація |
+| **SubagentStop** | Субагент завершив роботу | Валідація результату, логування |
+| **Stop** | Claude завершив відповідь | Генерація підсумку, завдання очищення |
+| **StopFailure** | Помилка API завершує хід | Відновлення після помилки, логування |
+| **TeammateIdle** | Тімейт у команді агентів без роботи | Розподіл роботи, координація |
+| **TaskCompleted** | Завдання позначено як виконане | Пост-обробка завдання |
+| **TaskCreated** | Завдання створено через TaskCreate | Відстеження завдань, логування |
+| **ConfigChange** | Зміна конфігураційного файлу | Валідація, поширення |
+| **CwdChanged** | Зміна робочого каталогу | Налаштування для конкретного каталогу |
+| **FileChanged** | Зміна відстежуваного файлу | Моніторинг файлів, тригери перебудови |
+| **PreCompact** | Перед ущільненням контексту | Збереження стану |
+| **PostCompact** | Після завершення ущільнення | Дії після ущільнення |
+| **WorktreeCreate** | Створення worktree | Налаштування середовища, встановлення залежностей |
+| **WorktreeRemove** | Видалення worktree | Очищення, звільнення ресурсів |
+| **Elicitation** | MCP-сервер запитує введення користувача | Валідація вводу |
+| **ElicitationResult** | Користувач відповідає на запит | Обробка відповіді |
+| **SessionEnd** | Завершення сесії | Очищення, фінальне логування |
 
-### Common Hooks
+### Типові хуки
 
-Hooks are configured in `~/.claude/settings.json` (user-level) or `.claude/settings.json` (project-level):
+Хуки налаштовуються у `~/.claude/settings.json` (рівень користувача) або `.claude/settings.json` (рівень проєкту):
 
 ```json
 {
@@ -2871,47 +2871,47 @@ Hooks are configured in `~/.claude/settings.json` (user-level) or `.claude/setti
 }
 ```
 
-### Hook Environment Variables
+### Змінні середовища хуків
 
-- `$CLAUDE_FILE_PATH` - Path to file being edited/written
-- `$CLAUDE_TOOL_NAME` - Name of tool being used
-- `$CLAUDE_SESSION_ID` - Current session identifier
-- `$CLAUDE_PROJECT_DIR` - Project directory path
+- `$CLAUDE_FILE_PATH` — Шлях до файлу, що редагується/записується
+- `$CLAUDE_TOOL_NAME` — Назва інструменту, що використовується
+- `$CLAUDE_SESSION_ID` — Ідентифікатор поточної сесії
+- `$CLAUDE_PROJECT_DIR` — Шлях до каталогу проєкту
 
-### Best Practices
+### Найкращі практики
 
-✅ **Do:**
-- Keep hooks fast (< 1 second)
-- Use hooks for validation and automation
-- Handle errors gracefully
-- Use absolute paths
+✅ **Рекомендовано:**
+- Тримайте хуки швидкими (< 1 секунди)
+- Використовуйте хуки для валідації та автоматизації
+- Обробляйте помилки коректно
+- Використовуйте абсолютні шляхи
 
-❌ **Don't:**
-- Make hooks interactive
-- Use hooks for long-running tasks
-- Hardcode credentials
+❌ **Не рекомендовано:**
+- Робити хуки інтерактивними
+- Використовувати хуки для тривалих завдань
+- Жорстко прописувати облікові дані
 
-**See**: [06-hooks/](06-hooks/) for detailed examples
+**Дивіться**: [06-hooks/](06-hooks/) для детальних прикладів
 
 ---
 
-## Checkpoints and Rewind
+## Контрольні точки та відкат
 
-### Overview
+### Огляд
 
-Checkpoints allow you to save conversation state and rewind to previous points, enabling safe experimentation and exploration of multiple approaches.
+Контрольні точки дозволяють зберігати стан розмови та повертатися до попередніх моментів, забезпечуючи безпечне експериментування та дослідження різних підходів.
 
-### Key Concepts
+### Ключові концепції
 
-| Concept | Description |
+| Концепція | Опис |
 |---------|-------------|
-| **Checkpoint** | Snapshot of conversation state including messages, files, and context |
-| **Rewind** | Return to a previous checkpoint, discarding subsequent changes |
-| **Branch Point** | Checkpoint from which multiple approaches are explored |
+| **Контрольна точка** | Знімок стану розмови, включаючи повідомлення, файли та контекст |
+| **Відкат** | Повернення до попередньої контрольної точки з відкиданням подальших змін |
+| **Точка розгалуження** | Контрольна точка, від якої досліджуються кілька підходів |
 
-### Accessing Checkpoints
+### Доступ до контрольних точок
 
-Checkpoints are created automatically with every user prompt. To rewind:
+Контрольні точки створюються автоматично з кожним промптом користувача. Для відкату:
 
 ```bash
 # Press Esc twice to open the checkpoint browser
@@ -2921,23 +2921,23 @@ Esc + Esc
 /rewind
 ```
 
-When you select a checkpoint, you choose from five options:
-1. **Restore code and conversation** -- Revert both to that point
-2. **Restore conversation** -- Rewind messages, keep current code
-3. **Restore code** -- Revert files, keep conversation
-4. **Summarize from here** -- Compress conversation into a summary
-5. **Never mind** -- Cancel
+При виборі контрольної точки доступні п'ять варіантів:
+1. **Відновити код і розмову** — Повернути обидва до цього моменту
+2. **Відновити розмову** — Повернути повідомлення, залишити поточний код
+3. **Відновити код** — Повернути файли, залишити розмову
+4. **Підсумувати звідси** — Стиснути розмову у підсумок
+5. **Скасувати** — Відмінити
 
-### Use Cases
+### Сценарії використання
 
-| Scenario | Workflow |
+| Сценарій | Робочий процес |
 |----------|----------|
-| **Exploring Approaches** | Save → Try A → Save → Rewind → Try B → Compare |
-| **Safe Refactoring** | Save → Refactor → Test → If fail: Rewind |
-| **A/B Testing** | Save → Design A → Save → Rewind → Design B → Compare |
-| **Mistake Recovery** | Notice issue → Rewind to last good state |
+| **Дослідження підходів** | Зберегти → Спробувати A → Зберегти → Відкат → Спробувати B → Порівняти |
+| **Безпечний рефакторинг** | Зберегти → Рефакторинг → Тест → Якщо невдача: Відкат |
+| **A/B тестування** | Зберегти → Дизайн A → Зберегти → Відкат → Дизайн B → Порівняти |
+| **Відновлення після помилки** | Помітити проблему → Відкат до останнього робочого стану |
 
-### Configuration
+### Конфігурація
 
 ```json
 {
@@ -2945,34 +2945,34 @@ When you select a checkpoint, you choose from five options:
 }
 ```
 
-**See**: [08-checkpoints/](08-checkpoints/) for detailed examples
+**Дивіться**: [08-checkpoints/](08-checkpoints/) для детальних прикладів
 
 ---
 
-## Advanced Features
+## Просунуті функції
 
-### Planning Mode
+### Режим планування
 
-Create detailed implementation plans before coding.
+Створюйте детальні плани реалізації перед кодуванням.
 
-**Activation:**
+**Активація:**
 ```bash
 /plan Implement user authentication system
 ```
 
-**Benefits:**
-- Clear roadmap with time estimates
-- Risk assessment
-- Systematic task breakdown
-- Opportunity for review and modification
+**Переваги:**
+- Чіткий план з оцінкою часу
+- Оцінка ризиків
+- Систематичне розбиття на завдання
+- Можливість перегляду та модифікації
 
-### Extended Thinking
+### Розширене мислення
 
-Deep reasoning for complex problems.
+Глибокий аналіз для складних проблем.
 
-**Activation:**
-- Toggle with `Alt+T` (or `Option+T` on macOS) during a session
-- Set `MAX_THINKING_TOKENS` environment variable for programmatic control
+**Активація:**
+- Перемикання `Alt+T` (або `Option+T` на macOS) під час сесії
+- Встановіть змінну середовища `MAX_THINKING_TOKENS` для програмного контролю
 
 ```bash
 # Enable extended thinking via environment variable
@@ -2980,17 +2980,17 @@ export MAX_THINKING_TOKENS=50000
 claude -p "Should we use microservices or monolith?"
 ```
 
-**Benefits:**
-- Thorough analysis of trade-offs
-- Better architectural decisions
-- Consideration of edge cases
-- Systematic evaluation
+**Переваги:**
+- Ретельний аналіз компромісів
+- Кращі архітектурні рішення
+- Врахування крайніх випадків
+- Систематична оцінка
 
-### Background Tasks
+### Фонові завдання
 
-Run long operations without blocking the conversation.
+Запускайте тривалі операції без блокування розмови.
 
-**Usage:**
+**Використання:**
 ```bash
 User: Run tests in background
 
@@ -3002,20 +3002,20 @@ Claude: Started task bg-1234
 /task cancel bg-1234 # Cancel task
 ```
 
-### Permission Modes
+### Режими дозволів
 
-Control what Claude can do.
+Контролюйте, що Claude може робити.
 
-| Mode | Description | Use Case |
+| Режим | Опис | Сценарій використання |
 |------|-------------|----------|
-| **default** | Standard permissions with prompts for sensitive actions | General development |
-| **acceptEdits** | Automatically accept file edits without confirmation | Trusted editing workflows |
-| **plan** | Analysis and planning only, no file modifications | Code review, architecture planning |
-| **auto** | Automatically approve safe actions, prompt only for risky ones | Balanced autonomy with safety |
-| **dontAsk** | Execute all actions without confirmation prompts | Experienced users, automation |
-| **bypassPermissions** | Full unrestricted access, no safety checks | CI/CD pipelines, trusted scripts |
+| **default** | Стандартні дозволи з запитами для чутливих дій | Загальна розробка |
+| **acceptEdits** | Автоматично приймати редагування файлів без підтвердження | Довірені робочі процеси редагування |
+| **plan** | Лише аналіз і планування, без модифікації файлів | Код-рев'ю, планування архітектури |
+| **auto** | Автоматично затверджувати безпечні дії, запитувати лише ризиковані | Збалансована автономія з безпекою |
+| **dontAsk** | Виконувати всі дії без запитів підтвердження | Досвідчені користувачі, автоматизація |
+| **bypassPermissions** | Повний необмежений доступ, без перевірок безпеки | CI/CD-конвеєри, довірені скрипти |
 
-**Usage:**
+**Використання:**
 ```bash
 claude --permission-mode plan          # Read-only analysis
 claude --permission-mode acceptEdits   # Auto-accept edits
@@ -3023,11 +3023,11 @@ claude --permission-mode auto          # Auto-approve safe actions
 claude --permission-mode dontAsk       # No confirmation prompts
 ```
 
-### Headless Mode (Print Mode)
+### Headless-режим (режим друку)
 
-Run Claude Code without interactive input for automation and CI/CD using the `-p` (print) flag.
+Запускайте Claude Code без інтерактивного введення для автоматизації та CI/CD за допомогою прапорця `-p` (print).
 
-**Usage:**
+**Використання:**
 ```bash
 # Run specific task
 claude -p "Run all tests"
@@ -3043,28 +3043,28 @@ cat error.log | claude -p "explain this error"
 claude -p --output-format json "list all functions in src/"
 ```
 
-### Scheduled Tasks
+### Заплановані завдання
 
-Run tasks on a repeating schedule using the `/loop` command.
+Запускайте завдання за розкладом за допомогою команди `/loop`.
 
-**Usage:**
+**Використання:**
 ```bash
 /loop every 30m "Run tests and report failures"
 /loop every 2h "Check for dependency updates"
 /loop every 1d "Generate daily summary of code changes"
 ```
 
-Scheduled tasks run in the background and report results when complete. They are useful for continuous monitoring, periodic checks, and automated maintenance workflows.
+Заплановані завдання виконуються у фоновому режимі та повідомляють про результати після завершення. Вони корисні для безперервного моніторингу, періодичних перевірок та автоматизованих робочих процесів обслуговування.
 
-### Chrome Integration
+### Інтеграція з Chrome
 
-Claude Code can integrate with the Chrome browser for web automation tasks. This enables capabilities like navigating web pages, filling forms, taking screenshots, and extracting data from websites directly within your development workflow.
+Claude Code може інтегруватися з браузером Chrome для завдань веб-автоматизації. Це забезпечує можливості навігації по веб-сторінках, заповнення форм, створення знімків екрану та витягування даних з вебсайтів безпосередньо у вашому робочому процесі розробки.
 
-### Session Management
+### Управління сесіями
 
-Manage multiple work sessions.
+Керуйте кількома робочими сесіями.
 
-**Commands:**
+**Команди:**
 ```bash
 /resume                # Resume a previous conversation
 /rename "Feature"      # Name the current session
@@ -3073,15 +3073,15 @@ claude -c              # Continue most recent conversation
 claude -r "Feature"    # Resume session by name/ID
 ```
 
-### Interactive Features
+### Інтерактивні функції
 
-**Keyboard Shortcuts:**
-- `Ctrl + R` - Search command history
-- `Tab` - Autocomplete
-- `↑ / ↓` - Command history
-- `Ctrl + L` - Clear screen
+**Клавіатурні скорочення:**
+- `Ctrl + R` — Пошук в історії команд
+- `Tab` — Автодоповнення
+- `↑ / ↓` — Історія команд
+- `Ctrl + L` — Очистити екран
 
-**Multi-line Input:**
+**Багаторядковий ввід:**
 ```bash
 User: \
 > Long complex prompt
@@ -3089,9 +3089,9 @@ User: \
 > \end
 ```
 
-### Configuration
+### Конфігурація
 
-Complete configuration example:
+Повний приклад конфігурації:
 
 ```json
 {
@@ -3113,22 +3113,22 @@ Complete configuration example:
 }
 ```
 
-**See**: [09-advanced-features/](09-advanced-features/) for comprehensive guide
+**Дивіться**: [09-advanced-features/](09-advanced-features/) для повного посібника
 
 ---
 
-## Resources
+## Ресурси
 
-- [Claude Code Documentation](https://code.claude.com/docs/en/overview)
-- [Anthropic Documentation](https://docs.anthropic.com)
-- [MCP GitHub Servers](https://github.com/modelcontextprotocol/servers)
-- [Anthropic Cookbook](https://github.com/anthropics/anthropic-cookbook)
+- [Документація Claude Code](https://code.claude.com/docs/en/overview)
+- [Документація Anthropic](https://docs.anthropic.com)
+- [MCP-сервери на GitHub](https://github.com/modelcontextprotocol/servers)
+- [Кулінарна книга Anthropic](https://github.com/anthropics/anthropic-cookbook)
 
 ---
 
-*Last updated: April 2026*
-*For Claude Haiku 4.5, Sonnet 4.6, and Opus 4.6*
-*Now includes: Hooks, Checkpoints, Planning Mode, Extended Thinking, Background Tasks, Permission Modes (6 modes), Headless Mode, Session Management, Auto Memory, Agent Teams, Scheduled Tasks, Chrome Integration, Channels, Voice Dictation, and Bundled Skills*
+*Останнє оновлення: квітень 2026*
+*Для Claude Haiku 4.5, Sonnet 4.6 та Opus 4.6*
+*Тепер включає: хуки, контрольні точки, режим планування, розширене мислення, фонові завдання, режими дозволів (6 режимів), headless-режим, управління сесіями, авто-пам'ять, команди агентів, заплановані завдання, інтеграцію з Chrome, канали, голосовий ввід та комплектні навички*
 
 ---
 **Last Updated**: April 9, 2026

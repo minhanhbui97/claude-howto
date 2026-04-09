@@ -548,4 +548,9 @@ allowed-tools: Bash(npm *), Bash(git *)
 
 ---
 
+**最后更新**: 2026 年 4 月 9 日
+**Claude Code 版本**: 2.3.0
+
+---
+
 *Claude How To 指南系列的一部分*

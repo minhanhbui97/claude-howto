@@ -3131,5 +3131,5 @@ Complete configuration example:
 *Now includes: Hooks, Checkpoints, Planning Mode, Extended Thinking, Background Tasks, Permission Modes (6 modes), Headless Mode, Session Management, Auto Memory, Agent Teams, Scheduled Tasks, Chrome Integration, Channels, Voice Dictation, and Bundled Skills*
 
 ---
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.3.0

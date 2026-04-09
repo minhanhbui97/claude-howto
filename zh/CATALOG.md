@@ -514,3 +514,8 @@ claude mcp add github -- npx -y @modelcontextprotocol/server-github
 - [Skills Repository](https://github.com/luongnv89/skills) - 现成 skills 集合
 - [Anthropic Cookbook](https://github.com/anthropics/anthropic-cookbook)
 - [Boris Cherny's Claude Code Workflow](https://x.com/bcherny/status/2007179832300581177) - Claude Code 的创造者分享了他的系统化工作流：并行 agents、共享 `CLAUDE.md`、Plan mode、slash commands、subagents，以及用于长时间自主会话的验证 hooks。
+
+---
+
+**最后更新**: 2026 年 4 月 9 日
+**Claude Code 版本**: 2.3.0

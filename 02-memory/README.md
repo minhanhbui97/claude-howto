@@ -1151,6 +1151,6 @@ For the most up-to-date information, refer to the official Claude Code documenta
 - [Official Memory Docs](https://code.claude.com/docs/en/memory) - Anthropic documentation
 
 ---
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.3.0
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5

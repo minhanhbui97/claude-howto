@@ -8,4 +8,4 @@
 **Full Changelog**: https://github.com/luongnv89/claude-howto/compare/v2.1.0...v2.1.1
 
 ---
-**Last Updated**: April 2026
+**Last Updated**: April 9, 2026

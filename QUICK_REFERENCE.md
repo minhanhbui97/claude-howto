@@ -505,5 +505,5 @@ Getting started checklist:
 **This Card**: Keep it handy for quick reference!
 
 ---
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.3.0

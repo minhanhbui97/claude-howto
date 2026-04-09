@@ -598,7 +598,7 @@ Lesson READMEs end with a metadata block:
 ```markdown
 ---
 **Last Updated**: March 2026
-**Claude Code Version**: 2.1+
+**Claude Code Version**: 2.3.0
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5
 ```
 
@@ -630,4 +630,4 @@ Before submitting content, verify:
 - [ ] Commit message follows conventional commits format
 
 ---
-**Last Updated**: April 2026
+**Last Updated**: April 9, 2026

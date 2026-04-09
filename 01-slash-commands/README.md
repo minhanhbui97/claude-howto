@@ -558,8 +558,8 @@ If both exist with the same name, the **skill takes precedence**. Remove one or 
 - [CLI Reference](https://code.claude.com/docs/en/cli-reference) - Command-line options
 
 ---
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.3.0
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5
 
 *Part of the [Claude How To](../) guide series*

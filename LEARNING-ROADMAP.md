@@ -738,8 +738,8 @@ Once you've completed all milestones:
 
 ---
 
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 9, 2026
+**Claude Code Version**: 2.3.0
 **Maintained by**: Claude How-To Contributors
 **License**: Educational purposes, free to use and adapt
 

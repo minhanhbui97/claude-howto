@@ -248,4 +248,4 @@ These steps capture the core recommendations for smooth workflows with Claude Co
 | **Keyboard Customization** | Customize keybindings including chord sequences | [Advanced Features](09-advanced-features/) |
 
 ---
-**Last Updated**: April 2026
+**Last Updated**: April 9, 2026

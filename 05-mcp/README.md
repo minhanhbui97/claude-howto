@@ -105,14 +105,6 @@ Server-Sent Events transport is deprecated in favor of `http` but still supporte
 claude mcp add --transport sse legacy-server https://example.com/sse
 ```
 
-### WebSocket Transport
-
-WebSocket transport for persistent bidirectional connections:
-
-```bash
-claude mcp add --transport ws realtime-server wss://example.com/mcp
-```
-
 ### Windows-Specific Note
 
 On native Windows (not WSL), use `cmd /c` for npx commands:
@@ -1116,6 +1108,8 @@ export GITHUB_TOKEN="your_token"
 - [Claude API Documentation](https://docs.anthropic.com)
 
 ---
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 11, 2026
+**Claude Code Version**: 2.1.101
+**Sources**:
+- https://code.claude.com/docs/en/mcp
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5

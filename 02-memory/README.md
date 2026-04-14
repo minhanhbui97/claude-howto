@@ -25,9 +25,7 @@ The memory system operates at multiple levels, from global personal preferences 
 |---------|---------|-------|-------------|
 | `/init` | Initialize project memory | `/init` | Starting new project, first-time CLAUDE.md setup |
 | `/memory` | Edit memory files in editor | `/memory` | Extensive updates, reorganization, reviewing content |
-| `#` prefix | Quick single-line memory add | `# Your rule here` | Adding quick rules during conversation |
-| `# new rule into memory` | Explicit memory addition | `# new rule into memory<br/>Your detailed rule` | Adding complex multi-line rules |
-| `# remember this` | Natural language memory | `# remember this<br/>Your instruction` | Conversational memory updates |
+| `#` prefix | ~~Quick single-line memory add~~ **Discontinued** | — | Use `/memory` or ask conversationally instead |
 | `@path/to/file` | Import external content | `@README.md` or `@docs/api.md` | Referencing existing documentation in CLAUDE.md |
 
 ## Quick Start: Initializing Memory
@@ -82,48 +80,38 @@ CLAUDE_CODE_NEW_INIT=1 claude
 - Git workflow conventions
 ```
 
-### Quick Memory Updates with `#`
+### Quick Memory Updates
 
-You can quickly add information to memory during any conversation by starting your message with `#`:
+> **Note**: The `#` shortcut for inline memory was discontinued. Use `/memory` to edit memory files directly, or ask Claude conversationally to remember something (e.g., "remember that we always use TypeScript strict mode").
 
-**Syntax:**
+The recommended ways to add information to memory are:
 
-```markdown
-# Your memory rule or instruction here
+**Option 1: Use `/memory` command**
+
+```bash
+/memory
 ```
 
-**Examples:**
+Opens your memory files in your system editor for direct editing.
 
-```markdown
-# Always use TypeScript strict mode in this project
+**Option 2: Ask conversationally**
 
-# Prefer async/await over promise chains
-
-# Run npm test before every commit
-
-# Use kebab-case for file names
+```
+Remember that we always use TypeScript strict mode in this project.
+Please add to memory: prefer async/await over promise chains.
 ```
 
-**How it works:**
+Claude will update the appropriate CLAUDE.md file based on your request.
 
-1. Start your message with `#` followed by your rule
-2. Claude recognizes this as a memory update request
-3. Claude asks which memory file to update (project or personal)
-4. The rule is added to the appropriate CLAUDE.md file
-5. Future sessions automatically load this context
+**Historical reference** (no longer functional):
 
-**Alternative patterns:**
+The `#` prefix shortcut previously allowed adding rules inline:
 
 ```markdown
-# new rule into memory
-Always validate user input with Zod schemas
-
-# remember this
-Use semantic versioning for all releases
-
-# add to memory
-Database migrations must be reversible
+# Always use TypeScript strict mode in this project  ← no longer works
 ```
+
+If you relied on this pattern, switch to the `/memory` command or conversational requests.
 
 ### The `/memory` Command
 
@@ -1163,6 +1151,8 @@ For the most up-to-date information, refer to the official Claude Code documenta
 - [Official Memory Docs](https://code.claude.com/docs/en/memory) - Anthropic documentation
 
 ---
-**Last Updated**: April 2026
-**Claude Code Version**: 2.1+
+**Last Updated**: April 11, 2026
+**Claude Code Version**: 2.1.101
+**Sources**:
+- https://code.claude.com/docs/en/memory
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.6, Claude Haiku 4.5

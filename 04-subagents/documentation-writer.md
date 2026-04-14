@@ -98,4 +98,4 @@ curl -X GET https://api.example.com/api/users/abc123 \
 ```
 
 ---
-**Last Updated**: April 2026
+**Last Updated**: April 9, 2026

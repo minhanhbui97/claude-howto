@@ -151,6 +151,10 @@ Each numbered folder follows the pattern:
 
 6. **This is a tutorial, not a library** — When adding content, focus on clear explanations, copy-paste examples, and visual diagrams. The value is in teaching concepts, not providing reusable code.
 
+## PR Conventions
+
+- Generate PR descriptions in markdown format ready for copy-and-paste to GitHub
+
 ## Commit Conventions
 
 Follow conventional commit format:
